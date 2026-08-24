@@ -5,7 +5,7 @@ param (
     [string]$BuildDir,
 
     # The path to your vcpkg installation
-    [string]$VcpkgRoot = "D:/dev/vcpkg",
+    [string]$VcpkgRoot = "C:/vcpkg",
 
     # The vcpkg triplet name (e.g., x64-windows)
     [string]$Triplet = "x64-windows"

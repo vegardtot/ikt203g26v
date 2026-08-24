@@ -1,9 +1,9 @@
-﻿# CMakeList.txt : CMake project for Submission-01, include source and define
+# CMakeList.txt : CMake project for Submission-01, include source and define
 # project specific logic here.
 #
 
 # Add source to this project's executable.
-add_executable (Submission-01 "main.cpp" "main.h")
+add_executable (Submission-01 "main.cpp" "template.h")
 target_link_libraries(Submission-01 PRIVATE LibExample)
 
 if (CMAKE_VERSION VERSION_GREATER 3.20)

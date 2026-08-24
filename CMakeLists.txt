@@ -23,6 +23,6 @@ endif()
 
 add_subdirectory(LibExample)
 add_subdirectory(Submissions)
-add_subdirectory(Portfolio)
+#add_subdirectory(Portfolio)
 
 # --- End of File ---
