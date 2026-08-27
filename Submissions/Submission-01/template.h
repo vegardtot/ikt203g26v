@@ -62,4 +62,51 @@ auto PrintContainer(const Container<T, N>& container) {
     container.PrintItems();
 }
 
+////////////////////////////////////////////////////////////////////////////////////
+/// Step 3
+////////////////////////////////////////////////////////////////////////////////////
+
+template<typename T>
+using FActionFunc = void (*)(T&);
+
+template<typename T>
+void ProcessArray(T arr[], unsigned int size, FActionFunc<T> action) {
+    for (unsigned int i = 0; i < size; i++)
+        action(arr[i]);
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+/// Step 4
+////////////////////////////////////////////////////////////////////////////////////
+
+template <typename T>
+class TDataAggregator {
+  public:
+    TDataAggregator() = default;
+    const T &Get() const { return stateTotal; }
+    void Accumulate(T &val) {
+        stateTotal += val;
+        val *= 2;
+    }
+
+    static void StaticCallback(T& val, void* context) {
+        auto self = static_cast <TDataAggregator<T>*>(context);
+        self->Accumulate(val);
+    }
+
+  private:
+    T stateTotal {};
+};
+
+template<typename T>
+using FContextFunc = void (*)(T&, void*);
+
+template<typename T>
+void ProcessWithContext(T arr[], unsigned int size, FContextFunc<T> ptr,
+    void* context) {
+    for (unsigned int i = 0; i < size; i++) {
+        ptr(arr[i], context);
+    }
+}
+
 #endif //_TEMPLATE_H
