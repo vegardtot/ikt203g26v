@@ -14,6 +14,6 @@ project ("Exercises")
 # Include sub-projects.
 add_subdirectory ("Submission-01")
 add_subdirectory ("Submission-02")
-#add_subdirectory ("Submission-03")
-#add_subdirectory ("Submission-04")
+add_subdirectory ("Submission-03")
+add_subdirectory ("Submission-04")
 #add_subdirectory ("Submission-05")
