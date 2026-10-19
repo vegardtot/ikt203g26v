@@ -41,16 +41,20 @@ class TMovieNode {
 
     TMovie data;
     TMovieNode *next = nullptr;
+    TMovieNode *prev = nullptr;
 };
+
+typedef bool (*FCheckMovie)(TMovie *, void *);
 
 class TMovieList {
   public:
-    TMovieList() { mHead = new TMovieNode(TMovie("", "", 0, 0.0, ::ACTION)); }
+    TMovieList() { mHead = new TMovieNode(TMovie("", "", 0, 0.0, EMovieGenreType::ACTION)); }
     void Append(TMovieNode node) {
         TMovieNode *currentNode = mHead;
         while (true) {
             if (currentNode->next == nullptr) {
                 currentNode->next = new TMovieNode(node.data);
+                currentNode->prev = currentNode;
                 return;
             }
             currentNode = currentNode->next;
@@ -80,6 +84,7 @@ class TMovieList {
         }
         if (previousNode != nullptr && currentNode != nullptr) {
             previousNode->next = currentNode->next;
+            currentNode->next->prev = previousNode;
             delete currentNode;
         }
     }
@@ -89,14 +94,41 @@ class TMovieList {
         for (TMovieNode *currentNode = mHead->next; currentNode != nullptr; currentNode = nextNode) {
             nextNode = currentNode->next;
             currentNode->next = previousNode;
+            currentNode->prev = nextNode;
             previousNode = currentNode;
         }
         mHead->next = previousNode;
     }
 
+    TMovie* SearchFor(FCheckMovie func, void *criteria) {
+        for (TMovieNode *currentNode = mHead->next; currentNode != nullptr;
+             currentNode = currentNode->next) {
+            if (func(&currentNode->data, criteria)) {
+                return &currentNode->data;
+            }
+        }
+        return nullptr;
+    
+    }
+
   private:
     TMovieNode *mHead;
 };
+
+static bool SearchByTitle(TMovie *movie, void *criteria) {
+    return movie->GetTitle() == *reinterpret_cast<std::string*>(criteria);
+}
+
+static bool SearchByDirector(TMovie *movie, void *criteria) {
+    return movie->GetDirector() == *reinterpret_cast<std::string*>(criteria);
+}
+
+static bool SearchByGenre(TMovie *movie, void *criteria) {
+    int genre = movie->GetGenre();
+    genre &= *reinterpret_cast<EMovieGenreType*>(criteria);
+    return genre > 0;
+}
+
 
 void printList(TMovieList &list) {
     TMovieNode *currentNode = list.GetAtIndex(0);
@@ -112,10 +144,11 @@ void printList(TMovieList &list) {
 
 int main(int argc, char *argv[]) {
 
-    TMovie m1 =  TMovie("Skogen", "Blend", 2002, 6.7, ::HORROR);
-    TMovie m2 = TMovie("Pumpehuset", "Raman", 2003, 9.8, ::DRAMA);
-    TMovie m3 = TMovie("Hatten", "Vegard", 2002, 9.1, ::SCIFI);
-    TMovie m4 = TMovie("Burn", "Mads", 2002, 7.3, ::COMEDY);
+    TMovie m1 =  TMovie("Skogen", "Blend", 2002, 6.7, EMovieGenreType::ACTION);
+    TMovie m2 =
+        TMovie("Pumpehuset", "Raman", 2003, 9.8, EMovieGenreType::DRAMA);
+    TMovie m3 = TMovie("Hatten", "Vegard", 2002, 9.1, EMovieGenreType::SCIFI);
+    TMovie m4 = TMovie("Burn", "Mads", 2002, 7.3, EMovieGenreType::COMEDY);
 
     TMovieNode n1 = TMovieNode(m1);
     TMovieNode n2 = TMovieNode(m2);
@@ -133,5 +166,21 @@ int main(int argc, char *argv[]) {
     list.Reverse();
     
     printList(list);
+    
+
+    auto genre1 = EMovieGenreType::SCIFI;
+    std::string title1 = "Burn";
+    std::string director1 =
+        "Vegard";
+    
+    
+    std::cout << list.SearchFor(&SearchByGenre, &genre1)->GetTitle()
+              << std::endl;
+    std::cout << list.SearchFor(&SearchByDirector, &director1)->GetTitle()
+              << std::endl;
+    std::cout << list.SearchFor(&SearchByTitle, &title1)->GetDirector()
+              << std::endl;
+
+
     return 0;
 }
