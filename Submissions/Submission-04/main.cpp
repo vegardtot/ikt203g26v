@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <cassert>
-#include <array>
 
 #include "Stack.h"
 #include "Queue.h"
@@ -13,7 +12,7 @@ using namespace TDataStructures;
 // implementation, I also need to define a suitable stack size as a template parameter
 // in the function signatures.
 
-template<int size> 
+template<size_t size> 
 std::string ReverseString(const std::string &s) {
     // Make sure the stack size is sufficient to hold the string
     assert(size >= s.length());
@@ -32,7 +31,7 @@ std::string ReverseString(const std::string &s) {
     return reversed;
 }
 
-template<int size>
+template<size_t size>
 int Factorial(int n) {
     if (n == 0) {
         return 1;
@@ -48,9 +47,9 @@ int Factorial(int n) {
     return result;
 }
 
-template<int size>
-static std::array<int, size> SimulateQueue(TQueue<size> &queue) {
-    std::array<int, size> result{};
+template<size_t size>
+static int* SimulateQueue(TQueue<size> &queue) {
+    int *result = new int[size]{};
     int index = 0;
 
     while (!queue.IsEmpty()) {
@@ -71,7 +70,6 @@ int main(int argc, char *argv[]) {
     queue.Enqueue(10);
     queue.Enqueue(20);
     queue.Enqueue(19);
-    std::cout << "Max size: " << queue.MAX_SIZE << std::endl;
     std::cout << queue.Peek() << std::endl;
     queue.Dequeue();
     std::cout << queue.Peek() << std::endl;
@@ -93,13 +91,14 @@ int main(int argc, char *argv[]) {
     testQueue.Enqueue(2);
     testQueue.Enqueue(23);
 
-    auto result = SimulateQueue(testQueue);
+    int *result = SimulateQueue(testQueue);
     std::cout << "Input in order: 1 8 3 2 23\n";
     std::cout << "Output in order: ";
-    for (const auto &value : result) {
-        std::cout << value << " ";
+    for (int i = 0; i < 5; i++) {
+        std::cout << result[i] << " ";
     }
     std::cout << std::endl;
+    delete[5] result;
 
     TGrid<100, 100> grid{};
     grid.Populate();

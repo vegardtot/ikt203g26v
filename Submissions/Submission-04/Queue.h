@@ -4,17 +4,17 @@
 
 namespace TDataStructures {
 
-template <int size>
+template <size_t size>
 class TQueue {
   public:
-    constexpr static int MAX_SIZE = size;
+    //constexpr static size_t MAX_SIZE = size;
 
   public:
     int Enqueue(int item) {
-        if (m_count >= MAX_SIZE)
+        if (m_count >= size)
             throw std::runtime_error(
                 "Queue overflow: Cannot enqueue to a full queue.");
-        ++m_back %= MAX_SIZE;
+        ++m_back %= size;
         m_data[m_back] = item;
         if (++m_count == 1)
             m_front = m_back;
@@ -26,7 +26,7 @@ class TQueue {
             throw std::runtime_error(
                 "Queue underflow: Cannot dequeue from an empty queue.");
         int item = m_data[m_front];
-        ++m_front %= MAX_SIZE;
+        ++m_front %= size;
         --m_count;
         return item;
     }
@@ -40,7 +40,7 @@ class TQueue {
     bool IsEmpty() const { return m_count <= 0; }
 
   private:
-    int m_data[MAX_SIZE]{};
+    int m_data[size]{};
     int m_front = -1;
     int m_back = -1;
     int m_count = 0;
