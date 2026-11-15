@@ -1,0 +1,14 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/vegard/dev/school/ikt203g26h/build/cmake_install.cmake",
+		"C:/Users/vegard/dev/school/ikt203g26h/build/LibExample/cmake_install.cmake",
+		"C:/Users/vegard/dev/school/ikt203g26h/build/Submissions/cmake_install.cmake",
+		"C:/Users/vegard/dev/school/ikt203g26h/build/Submissions/Submission-01/cmake_install.cmake",
+		"C:/Users/vegard/dev/school/ikt203g26h/build/Submissions/Submission-02/cmake_install.cmake",
+		"C:/Users/vegard/dev/school/ikt203g26h/build/Submissions/Submission-03/cmake_install.cmake",
+		"C:/Users/vegard/dev/school/ikt203g26h/build/Submissions/Submission-04/cmake_install.cmake",
+		"C:/Users/vegard/dev/school/ikt203g26h/build/Submissions/Submission-05/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

@@ -5,7 +5,7 @@
 #include <string>
 
 namespace BankSystem {
-enum class EBankAccountType {
+enum class EBankAccountType : unsigned int {
     Checking,
     Debit,
     Savings,
@@ -20,14 +20,14 @@ inline double RandomInitialBalance(EBankAccountType type) {
 
     switch (type) {
 
-        [[fallthrough]];
     case EBankAccountType::Checking:
-
         [[fallthrough]];
+
     case EBankAccountType::Debit:
-
         [[fallthrough]];
+
     case EBankAccountType::Savings:
+        [[fallthrough]];
 
     case EBankAccountType::Pension:
         return std::uniform_real_distribution<double>(0, 1000)(rng);
@@ -46,10 +46,10 @@ inline double RandomInitialBalance(EBankAccountType type) {
 class TBankAccount {
   public:
     TBankAccount(EBankAccountType type, const std::string &firstName,
-                 const std::string &lastName)
+                 const std::string &lastName, time_t dateCreated = time(nullptr))
         : m_accountNumber(std::to_string(s_accountNumberIncrement++)),
           m_type(type), m_ownerFirstName(firstName), m_ownerLastName(lastName),
-          m_creationTimstamp(time(nullptr)),
+          m_creationTimstamp(dateCreated),
           m_balance(RandomInitialBalance(type)) {}
 
     double GetBalance() const { return m_balance; }
