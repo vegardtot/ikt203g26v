@@ -3,6 +3,7 @@
 #include <ctime>
 #include <random>
 #include <string>
+#include <string_view>
 
 namespace BankSystem {
 enum class EBankAccountType : unsigned int {
@@ -45,14 +46,25 @@ inline double RandomInitialBalance(EBankAccountType type) {
 
 class TBankAccount {
   public:
-    TBankAccount(EBankAccountType type, const std::string &firstName,
-                 const std::string &lastName, time_t dateCreated = time(nullptr))
+    TBankAccount(EBankAccountType type, const std::string_view firstName,
+                 const std::string_view lastName, time_t dateCreated = time(nullptr))
         : m_accountNumber(std::to_string(s_accountNumberIncrement++)),
           m_type(type), m_ownerFirstName(firstName), m_ownerLastName(lastName),
           m_creationTimstamp(dateCreated),
           m_balance(RandomInitialBalance(type)) {}
 
     double GetBalance() const { return m_balance; }
+    std::string_view GetFirstName() const { return m_ownerFirstName; }
+    std::string_view GetLastName() const { return m_ownerLastName; }
+    std::string_view GetAccountNumber() const { return m_accountNumber; }
+    time_t GetCreationDate() const { return m_creationTimstamp; }
+
+    std::string GetCreationDateString() const {
+        char buffer[20];
+        strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S",
+                 localtime(&m_creationTimstamp));
+        return std::string(buffer);
+    }
 
   private:
     std::string m_accountNumber;
