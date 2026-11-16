@@ -29,6 +29,19 @@ static void PrintEveryAccountInDateRange(TBankAccount **accountArray,
                                          int arraySize, time_t fromDate,
                                          time_t toDate, SearchSummary &summary);
 
+static bool IsAccountNumber(TBankAccount *account, void *key) {
+    std::string_view accountNumberKey(static_cast<const char *>(key));
+    return account->GetAccountNumber() == accountNumberKey;
+}
+
+static bool IsAccountInDateRange(TBankAccount *account, void *key) {
+    time_t *dateRange = static_cast<time_t *>(key);
+    time_t fromDate = dateRange[0];
+    time_t toDate = dateRange[1];
+    time_t accountDate = account->GetCreationDate();
+    return accountDate >= fromDate && accountDate <= toDate;
+}
+
 static void PrintAccount(TBankAccount *account) {
     std::cout << "Name: " << account->GetFirstName() << " "
               << account->GetLastName()
@@ -54,18 +67,32 @@ int main() {
     std::cout << "Comparisons: " << summary.comparisons
               << ". Time spent: " << summary.timeSpentMs << " ms." << std::endl;
 
-    const time_t June2024 = 1685577600; // 2024-06-01 00:00:00
-    const time_t July2024 = 1711929600; // 2024-07-01 00:00:00
+    const time_t June2024_start = 1685577600; // 2024-06-01 00:00:00
+    const time_t June2024_end = 1688169599;   // 2024-06-30 23:59:59
+    const time_t January2024_start = 1704067200; // 2024-01-01 00:00:00
+    const time_t EndFirstQuarter2024 = 1706745599; // 2024-03-31 23:59:59
 
     SearchSummary summary2{};
-    PrintEveryAccountInDateRange(accountArray, count, June2024, July2024,
+    PrintEveryAccountInDateRange(accountArray, count, June2024_start, June2024_end,
                                  summary2);
 
     std::cout << "Comparisons: " << summary2.comparisons
               << ". Time spent: " << summary2.timeSpentMs << " ms."
               << std::endl;
 
+    SearchSummary summary3 {};
+    list.Find(&IsAccountNumber, (void *)"5999", summary3);
+
+    SearchSummary summary4{};
+    time_t dateRange[2] = {June2024_start, June2024_end};
+    auto subList = list.Every(&IsAccountInDateRange, (void *)dateRange, summary4);
+
+    SearchSummary summary5{};
+    PrintEveryAccountInDateRange(accountArray, count, January2024_start,
+                                 EndFirstQuarter2024, summary5);
+
     delete[] accountArray;
+    delete subList;
     return 0;
 }
 

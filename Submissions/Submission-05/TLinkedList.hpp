@@ -83,8 +83,8 @@ template <typename T> class TLinkedList {
     T *Find(FCompare compareFn, void *searchKey, SearchSummary &summary) {
         for (Node *node = m_head->next; node != nullptr; node = node->next) {
             summary.comparisons++;
-            if (compareFn(node, searchKey)) {
-                return node;
+            if (compareFn(node->data, searchKey)) {
+                return node->data;
             }
         }
         return nullptr;
@@ -92,11 +92,13 @@ template <typename T> class TLinkedList {
 
     TLinkedList<T> *Every(FCompare compareFn, void *searchKey,
                           SearchSummary &summary) {
+        // Construct a non-owning list to hold the reslts of the search.
+        // The caller is responsible for deleting the returned list.
         TLinkedList<T> *subList = new TLinkedList<T>(false);
         for (Node *node = m_head->next; node != nullptr; node = node->next) {
             summary.comparisons++;
-            if (compareFn(node, searchKey)) {
-                subList->Append(node);
+            if (compareFn(node->data, searchKey)) {
+                subList->Append(node->data);
             }
         }
         return subList;
