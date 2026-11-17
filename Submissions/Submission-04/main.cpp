@@ -100,13 +100,36 @@ int main(int argc, char *argv[]) {
     std::cout << std::endl;
     delete[] result;
 
-    TGrid<100, 100> grid{};
-    grid.Populate();
-    int index = grid.FindZero<ETraversalMethod::DepthFirst>(197);
-    
-    grid.Print();
+    TGrid<100, 100> grid1{};
+    grid1.Populate();
+    int index1 = grid1.FindZero<ETraversalMethod::DepthFirst>(197);
+    // LIFO guides the search to explore as far as possible along each branch
+    // before backtracking. This is because the last element added to the stack
+    // is the first one to be removed.  
+    grid1.Print();
+    std::cout << "Found zero at index: " << index1 << std::endl;
 
-    std::cout << "Found zero at index: " << index << std::endl;
+    TGrid<100, 100> grid2{};
+    grid2.Populate();
+    int index2 = grid2.FindZero<ETraversalMethod::BreadthFirst>(197);
+    // FIFO guides the search to explore all neighbors at the present depth
+    // prior to moving on to nodes at the next depth level. This is because the
+    // first element added to the queue is the first one to be removed.
+    grid2.Print();
+    std::cout << "Found zero at index: " << index2 << std::endl;
+
+    // Depth-first search (DFS) explores as far as possible along each branch
+    // before backtracking, while breadth-first search (BFS) explores all
+    // neighbors at the present depth prior to moving on to nodes at the next
+    // depth level. DFS can be more memory efficient for deep trees, while BFS
+    // is guaranteed to find the shortest path in unweighted graphs.
+    // Both algorithms have a time complexity of O(V + E), where V is the number
+    // of vertices and E is the number of edges in the graph.
+    // In this case, the grid is a 2D array, and the search algorithms are used
+    // to find the first occurrence of a zero in the grid. The choice between
+    // DFS and BFS depends on the specific requirements of the search, such as
+    // whether you want to find the first zero encountered (DFS) or the closest
+    // zero in terms of distance (BFS).
 
     return 0;
 }
