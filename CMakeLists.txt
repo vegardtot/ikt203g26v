@@ -8,9 +8,12 @@ project(IKT203_Course_Assignments LANGUAGES CXX)
 
 # We enforce C++17 (or C++20 if you prefer) for the entire project.
 # All targets (exercises, libraries, etc.) will inherit this setting.
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Export compile commands for clangd language server support
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(MSVC)
   add_compile_options("/Zc:__cplusplus")
@@ -23,6 +26,6 @@ endif()
 
 add_subdirectory(LibExample)
 add_subdirectory(Submissions)
-add_subdirectory(Assignments)
+#add_subdirectory(Assignments)
 
 # --- End of File ---

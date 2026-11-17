@@ -46,9 +46,9 @@ class TMovieNode {
 
 typedef bool (*FCheckMovie)(TMovie *, void *);
 
-class TMovieList {
+class TLinkedList {
   public:
-    TMovieList() { mHead = new TMovieNode(TMovie("", "", 0, 0.0, EMovieGenreType::ACTION)); }
+    TLinkedList() { mHead = new TMovieNode(TMovie("", "", 0, 0.0, EMovieGenreType::ACTION)); }
     void Append(TMovieNode node) {
         TMovieNode *currentNode = mHead;
         while (true) {
@@ -130,7 +130,7 @@ static bool SearchByGenre(TMovie *movie, void *criteria) {
 }
 
 
-void printList(TMovieList &list) {
+void printList(TLinkedList &list) {
     TMovieNode *currentNode = list.GetAtIndex(0);
     while (currentNode != nullptr) {
         std::cout << "Title: " << currentNode->data.GetTitle()
@@ -155,7 +155,7 @@ int main(int argc, char *argv[]) {
     TMovieNode n3 = TMovieNode(m3);
     TMovieNode n4 = TMovieNode(m4);
 
-    TMovieList list = {};
+    TLinkedList list = {};
     list.Append(n1);
     list.Append(n2);
     list.Append(n3);

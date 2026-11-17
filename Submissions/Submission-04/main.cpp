@@ -98,7 +98,7 @@ int main(int argc, char *argv[]) {
         std::cout << result[i] << " ";
     }
     std::cout << std::endl;
-    delete[5] result;
+    delete[] result;
 
     TGrid<100, 100> grid{};
     grid.Populate();

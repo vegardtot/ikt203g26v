@@ -1,0 +1,32 @@
+[
+{
+  "directory": "C:/Users/vegard/dev/school/ikt203g26h/build",
+  "command": "C:\\PROGRA~1\\mingw64\\bin\\C__~1.EXE -IC:/Users/vegard/dev/school/ikt203g26h/LibExample -std=c++20 -o Submissions\\Submission-01\\CMakeFiles\\Submission-01.dir\\main.cpp.obj -c C:\\Users\\vegard\\dev\\school\\ikt203g26h\\Submissions\\Submission-01\\main.cpp",
+  "file": "C:/Users/vegard/dev/school/ikt203g26h/Submissions/Submission-01/main.cpp",
+  "output": "C:/Users/vegard/dev/school/ikt203g26h/build/Submissions/Submission-01/CMakeFiles/Submission-01.dir/main.cpp.obj"
+},
+{
+  "directory": "C:/Users/vegard/dev/school/ikt203g26h/build",
+  "command": "C:\\PROGRA~1\\mingw64\\bin\\C__~1.EXE -IC:/Users/vegard/dev/school/ikt203g26h/LibExample -std=c++20 -o Submissions\\Submission-02\\CMakeFiles\\Submission-02.dir\\main.cpp.obj -c C:\\Users\\vegard\\dev\\school\\ikt203g26h\\Submissions\\Submission-02\\main.cpp",
+  "file": "C:/Users/vegard/dev/school/ikt203g26h/Submissions/Submission-02/main.cpp",
+  "output": "C:/Users/vegard/dev/school/ikt203g26h/build/Submissions/Submission-02/CMakeFiles/Submission-02.dir/main.cpp.obj"
+},
+{
+  "directory": "C:/Users/vegard/dev/school/ikt203g26h/build",
+  "command": "C:\\PROGRA~1\\mingw64\\bin\\C__~1.EXE -IC:/Users/vegard/dev/school/ikt203g26h/LibExample -std=c++20 -o Submissions\\Submission-03\\CMakeFiles\\Submission-03.dir\\main.cpp.obj -c C:\\Users\\vegard\\dev\\school\\ikt203g26h\\Submissions\\Submission-03\\main.cpp",
+  "file": "C:/Users/vegard/dev/school/ikt203g26h/Submissions/Submission-03/main.cpp",
+  "output": "C:/Users/vegard/dev/school/ikt203g26h/build/Submissions/Submission-03/CMakeFiles/Submission-03.dir/main.cpp.obj"
+},
+{
+  "directory": "C:/Users/vegard/dev/school/ikt203g26h/build",
+  "command": "C:\\PROGRA~1\\mingw64\\bin\\C__~1.EXE -IC:/Users/vegard/dev/school/ikt203g26h/LibExample -std=c++20 -o Submissions\\Submission-04\\CMakeFiles\\Submission-04.dir\\main.cpp.obj -c C:\\Users\\vegard\\dev\\school\\ikt203g26h\\Submissions\\Submission-04\\main.cpp",
+  "file": "C:/Users/vegard/dev/school/ikt203g26h/Submissions/Submission-04/main.cpp",
+  "output": "C:/Users/vegard/dev/school/ikt203g26h/build/Submissions/Submission-04/CMakeFiles/Submission-04.dir/main.cpp.obj"
+},
+{
+  "directory": "C:/Users/vegard/dev/school/ikt203g26h/build",
+  "command": "C:\\PROGRA~1\\mingw64\\bin\\C__~1.EXE -IC:/Users/vegard/dev/school/ikt203g26h/LibExample -std=c++20 -o Submissions\\Submission-05\\CMakeFiles\\Submission-05.dir\\main.cpp.obj -c C:\\Users\\vegard\\dev\\school\\ikt203g26h\\Submissions\\Submission-05\\main.cpp",
+  "file": "C:/Users/vegard/dev/school/ikt203g26h/Submissions/Submission-05/main.cpp",
+  "output": "C:/Users/vegard/dev/school/ikt203g26h/build/Submissions/Submission-05/CMakeFiles/Submission-05.dir/main.cpp.obj"
+}
+]
