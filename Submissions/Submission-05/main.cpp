@@ -1,6 +1,7 @@
 #include <chrono>
 #include <fstream>
 #include <iostream>
+#include <ratio>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -29,27 +30,13 @@ static void PrintEveryAccountInDateRange(TBankAccount **accountArray,
                                          int arraySize, time_t fromDate,
                                          time_t toDate, SearchSummary &summary);
 
-static bool IsAccountNumber(TBankAccount *account, void *key) {
-    std::string_view accountNumberKey(static_cast<const char *>(key));
-    return account->GetAccountNumber() == accountNumberKey;
-}
+static bool IsAccountNumber(TBankAccount *account, void *key);
 
-static bool IsAccountInDateRange(TBankAccount *account, void *key) {
-    time_t *dateRange = static_cast<time_t *>(key);
-    time_t fromDate = dateRange[0];
-    time_t toDate = dateRange[1];
-    time_t accountDate = account->GetCreationDate();
-    return accountDate >= fromDate && accountDate <= toDate;
-}
+static bool IsAccountInDateRange(TBankAccount *account, void *key);
 
-static void PrintAccount(TBankAccount *account) {
-    std::cout << "Name: " << account->GetFirstName() << " "
-              << account->GetLastName()
-              << ". Balance: " << account->GetBalance() << std::endl;
-    std::cout << "Account Number: " << account->GetAccountNumber() << std::endl;
-    std::cout << "Creation Date: " << account->GetCreationDateString()
-              << std::endl;
-}
+static void PrintAccount(TBankAccount *account);
+
+static void PrintSummary(const SearchSummary &summary);
 
 int main() {
 
@@ -63,33 +50,60 @@ int main() {
     if (auto account =
             FindAccountByNumber(accountArray, count, "5999", summary)) {
         PrintAccount(account);
+        PrintSummary(summary);
     }
-    std::cout << "Comparisons: " << summary.comparisons
-              << ". Time spent: " << summary.timeSpentMs << " ms." << std::endl;
 
-    const time_t June2024_start = 1685577600; // 2024-06-01 00:00:00
-    const time_t June2024_end = 1688169599;   // 2024-06-30 23:59:59
-    const time_t January2024_start = 1704067200; // 2024-01-01 00:00:00
-    const time_t EndFirstQuarter2024 = 1706745599; // 2024-03-31 23:59:59
+    constexpr time_t June2024_start = 1685577600;      // 2024-06-01 00:00:00
+    constexpr time_t June2024_end = 1688169599;        // 2024-06-30 23:59:59
+    constexpr time_t January2024_start = 1704067200;   // 2024-01-01 00:00:00
+    constexpr time_t EndFirstQuarter2024 = 1706745599; // 2024-03-31 23:59:59
 
     SearchSummary summary2{};
-    PrintEveryAccountInDateRange(accountArray, count, June2024_start, June2024_end,
-                                 summary2);
+    PrintEveryAccountInDateRange(accountArray, count, June2024_start,
+                                 June2024_end, summary2);
 
-    std::cout << "Comparisons: " << summary2.comparisons
-              << ". Time spent: " << summary2.timeSpentMs << " ms."
-              << std::endl;
+    PrintSummary(summary2);
 
-    SearchSummary summary3 {};
-    list.Find(&IsAccountNumber, (void *)"5999", summary3);
+    SearchSummary summary3{};
+    if (TBankAccount *account =
+            list.Find(&IsAccountNumber, (void *)"5999", summary3)) {
+        PrintAccount(account);
+    }
+    PrintSummary(summary3);
 
     SearchSummary summary4{};
-    time_t dateRange[2] = {June2024_start, June2024_end};
-    auto subList = list.Every(&IsAccountInDateRange, (void *)dateRange, summary4);
+    if (TBankAccount *account =
+            list.Find(&IsAccountNumber, (void *)"9000", summary4)) {
+        PrintAccount(account);
+    }
+    PrintSummary(summary4);
 
     SearchSummary summary5{};
+    time_t dateRange[2] = {June2024_start, June2024_end};
+    auto subList =
+        list.Every(&IsAccountInDateRange, (void *)dateRange, summary5);
+    for (auto node = subList->GetAtIndex(0); node != nullptr;
+         node = node->next) {
+        PrintAccount(node->data);
+    }
+    PrintSummary(summary5);
+
+    SearchSummary summary6{};
     PrintEveryAccountInDateRange(accountArray, count, January2024_start,
-                                 EndFirstQuarter2024, summary5);
+                                 EndFirstQuarter2024, summary6);
+    PrintSummary(summary6);
+
+    // Analysis: TLinkedList<T>::Find demostrates O(n) time complexity, as it
+    // iterates through the list to find the matching criteria.
+    // At worst case, it will traverse the entire list, resulting in linear time
+    // complexity.
+    //
+    // The difference in flexibility between the generic Find and
+    // PrintEveryAccountInDateRange is that the generic Find allows for custom
+    // comparison functions to be passed in, enabling searches based on various
+    // criteria. In contrast, PrintEveryAccountInDateRange is specifically
+    // designed to print accounts within a date range, limiting its use to that
+    // specific case.
 
     delete[] accountArray;
     delete subList;
@@ -175,4 +189,31 @@ void PrintEveryAccountInDateRange(TBankAccount **accountArray, int arraySize,
     auto elapsed = std::chrono::steady_clock::now() - start;
     summary.timeSpentMs =
         std::chrono::duration<double, std::milli>(elapsed).count();
+}
+
+bool IsAccountNumber(TBankAccount *account, void *key) {
+    std::string_view accountNumberKey(static_cast<const char *>(key));
+    return account->GetAccountNumber() == accountNumberKey;
+}
+
+bool IsAccountInDateRange(TBankAccount *account, void *key) {
+    time_t *dateRange = static_cast<time_t *>(key);
+    time_t fromDate = dateRange[0];
+    time_t toDate = dateRange[1];
+    time_t accountDate = account->GetCreationDate();
+    return accountDate >= fromDate && accountDate <= toDate;
+}
+
+void PrintAccount(TBankAccount *account) {
+    std::cout << "Name: " << account->GetFirstName() << " "
+              << account->GetLastName()
+              << ". Balance: " << account->GetBalance() << std::endl;
+    std::cout << "Account Number: " << account->GetAccountNumber() << std::endl;
+    std::cout << "Creation Date: "
+              << FormatCreationDate(account->GetCreationDate()) << std::endl;
+}
+
+static void PrintSummary(const SearchSummary &summary) {
+    std::cout << "Comparisons: " << summary.comparisons
+              << ". Time spent: " << summary.timeSpentMs << " ms." << std::endl;
 }

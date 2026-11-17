@@ -59,13 +59,6 @@ class TBankAccount {
     std::string_view GetAccountNumber() const { return m_accountNumber; }
     time_t GetCreationDate() const { return m_creationTimstamp; }
 
-    std::string GetCreationDateString() const {
-        char buffer[20];
-        strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S",
-                 localtime(&m_creationTimstamp));
-        return std::string(buffer);
-    }
-
   private:
     std::string m_accountNumber;
     EBankAccountType m_type;
@@ -76,5 +69,14 @@ class TBankAccount {
 
     inline static unsigned int s_accountNumberIncrement = 0;
 };
+
+// A helper function to convert a time_t timestamp to a human-readable string
+// representation.
+inline std::string FormatCreationDate(time_t timestamp) {
+    char buffer[20];
+    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S",
+             localtime(&timestamp));
+    return std::string(buffer);
+}
 
 } // namespace BankSystem

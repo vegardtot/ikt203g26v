@@ -1,9 +1,17 @@
 #pragma once
 
+#include <chrono>
+#include <ratio>
+
 struct SearchSummary {
     long long comparisons = 0;
     double timeSpentMs = 0;
 };
+
+// A simple singly linked list implementation that can hold any type of data.
+// The list is singly linked, because it is sufficient for the use cases in this
+// assignment. The list can either own the underlying data it holds, or it can
+// be a non-owning list that holds pointers to data that is owned elsewhere
 
 template <typename T> struct TNode {
     T *data = nullptr;
@@ -81,13 +89,20 @@ template <typename T> class TLinkedList {
     }
 
     T *Find(FCompare compareFn, void *searchKey, SearchSummary &summary) {
+        T *foundData = nullptr;
+        std::chrono::steady_clock::time_point start =
+            std::chrono::steady_clock::now();
         for (Node *node = m_head->next; node != nullptr; node = node->next) {
             summary.comparisons++;
             if (compareFn(node->data, searchKey)) {
-                return node->data;
+                foundData = node->data;
+                break;
             }
         }
-        return nullptr;
+        auto elapsed = std::chrono::steady_clock::now() - start;
+        summary.timeSpentMs =
+            std::chrono::duration<double, std::milli>(elapsed).count();
+        return foundData;
     }
 
     TLinkedList<T> *Every(FCompare compareFn, void *searchKey,
@@ -95,12 +110,21 @@ template <typename T> class TLinkedList {
         // Construct a non-owning list to hold the reslts of the search.
         // The caller is responsible for deleting the returned list.
         TLinkedList<T> *subList = new TLinkedList<T>(false);
+
+        std::chrono::steady_clock::time_point start =
+            std::chrono::steady_clock::now();
+
         for (Node *node = m_head->next; node != nullptr; node = node->next) {
             summary.comparisons++;
             if (compareFn(node->data, searchKey)) {
                 subList->Append(node->data);
             }
         }
+
+        auto elapsed = std::chrono::steady_clock::now() - start;
+        summary.timeSpentMs =
+            std::chrono::duration<double, std::milli>(elapsed).count();
+
         return subList;
     }
 
